@@ -1,8 +1,16 @@
+
+import _ from 'lodash';
+import axios from 'axios';
+import i18next from 'i18next';
 import * as yup from 'yup';
 import buildStateWatcher from './watchers';
+import parser from './parser';
+import en from './languages/en';
+
+// const corsServer = 'https://cors-anywhere.herokuapp.com/';
+const updateTime = 5000;
 
 const schema = yup.string().url().required();
-console.log('schema: ', schema);
 
 const linkValidator = (channels, link) => {
   try {
@@ -13,43 +21,106 @@ const linkValidator = (channels, link) => {
   }
 };
 
-export default () => {
-  const state = {
-    form: {
-      state: 'filling',
-      errorsMessages: null,
-    },
-    feedLoader: {
-      state: 'ready',
-      errorsMessages: null,
-    },
-    feeds: [],
-    posts: [],
-  };
-
-  const watchedState = buildStateWatcher(state);
-
-  const form = document.getElementById('rssForm');
-  console.log('form: ', form)
-
-  form.addEventListener('submit', (even) => {
-    even.preventDefault()
-    console.log('submit');
-
-    const formData = new FormData(event.target);
-    const rssLink = formData.get('url');
-    console.log('rssLink: ', rssLink)
-
-    const loadedLinks = state.feeds.map(({ link }) => link);
-
-    const validationErrors = linkValidator(loadedLinks, rssLink);
-    console.log('validationErrors: ', validationErrors)
-
-    if (validationErrors === null) {
-      watchedState.form.state = 'valid';
-    } else {
-      watchedState.form.errorsMessages = `validationError.${validationErrors.type}`;
-      watchedState.form.state = 'invalid';
-    }
+fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent('https://news.ycombinator.com/rss')}`)
+  .then(response => {
+    if (response.ok) return response.json()
+    throw new Error('Network response was not ok.')
   })
-}
+  .then(data => console.log(data.contents));
+
+const updateFeed = (url, id, watchedState) => {
+  axios
+    .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
+    .then((response) => {
+      const { posts: newPosts } = parser(response.data.contents);
+      const oldPosts = watchedState.posts.filter((post) => post.feedId === id);
+
+      const parsedPosts = newPosts.map((post) => ({ ...post, feedId: id }));
+
+      const differentPosts = _.differenceWith(parsedPosts, oldPosts, _.isEqual);
+      console.log('differentPosts: ', differentPosts)
+
+      watchedState.posts.push(...differentPosts);
+    })
+    .finally(() => {
+      setTimeout(() => updateFeed(url, id, watchedState), updateTime);
+    });
+};
+
+const loadFeed = (url, watchedState, state, rssLink) => {
+  watchedState.feedLoader.state = 'loading';
+  axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
+    .then((response) => {
+      const { title: feedTitle, posts: parsedPosts } = parser(response.data.contents);
+      const feedId = _.uniqueId();
+
+      const posts = parsedPosts.map((post) => ({ ...post, feedId }));
+
+      state.posts.push(...posts);
+
+      const feed = {
+        link: rssLink,
+        feedId,
+        name: feedTitle,
+      };
+
+      watchedState.feeds.push(feed);
+      watchedState.feedLoader.state = 'loaded';
+      watchedState.form.state = 'filling';
+      setTimeout(() => updateFeed(url, feedId, watchedState), updateTime);
+    })
+    .catch(() => {
+      watchedState.feedLoader.errorsMessages = 'download error';
+      watchedState.feedLoader.state = 'error';
+    });
+};
+
+export default () => {
+  i18next.init({
+    lng: 'en',
+    debug: true,
+    resources: {
+      en,
+    },
+  }).then(() => {
+    const state = {
+      form: {
+        state: 'filling',
+        errorsMessages: null,
+      },
+      feedLoader: {
+        state: 'ready',
+        errorsMessages: null,
+      },
+      feeds: [],
+      posts: [],
+    };
+
+    const watchedState = buildStateWatcher(state);
+
+    const form = document.getElementById('rssForm');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const rssLink = formData.get('url');
+
+      const correctUrl = `${rssLink}`;
+
+      const loadedLinks = state.feeds.map(({ link }) => link);
+
+      const validationErrors = linkValidator(loadedLinks, rssLink);
+
+      if (validationErrors === null) {
+        watchedState.form.state = 'valid';
+      } else {
+        watchedState.form.errorsMessages = `validationError.${validationErrors.type}`;
+        watchedState.form.state = 'invalid';
+      }
+
+      if (state.form.state === 'valid') {
+        loadFeed(correctUrl, watchedState, state, rssLink);
+      }
+    });
+  });
+};

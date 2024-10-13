@@ -34,7 +34,9 @@
     "workbox-webpack-plugin": "^7.1.0"
   },
   "dependencies": {
+    "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
+    "i18next": "^23.16.0",
     "normalize.css": "^8.0.1",
     "on-change": "^5.0.1",
     "yup": "^1.4.0"
