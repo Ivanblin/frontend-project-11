@@ -1,6 +1,28 @@
 import onChange from 'on-change';
 import i18next from 'i18next';
 
+const renderModal = (event, currentPost) => {
+  const modalTitle = document.querySelector('.modal-title');
+  const modalDescription = document.querySelector('.modal-body');
+  const modalPreviewBtn = document.querySelector('.modal-btn-preview');
+  const modalCloseBtn = document.querySelector('.modal-btn-close');
+
+
+  const targetPost = event.target.parentElement.querySelector('a');
+
+  targetPost.classList.remove('fw-bold');
+  targetPost.classList.add('fw-normal', 'text-secondary');
+  modalCloseBtn.textContent = 'Закрыть';
+  modalCloseBtn.src = currentPost.link;
+  modalPreviewBtn.textContent = 'Читать';
+  modalTitle.innerHTML = currentPost.title;
+  modalDescription.innerHTML = currentPost.description;
+
+  modalPreviewBtn.addEventListener('click', () => {
+    window.open(currentPost.link, '_blank');
+  });
+}
+
 const buildStateWatcher = (state) => {
   const stateWatcher = onChange(state, (path, value) => {
     const urlInput = document.querySelector('[name="url"]');
@@ -65,10 +87,29 @@ const buildStateWatcher = (state) => {
           linksForFeed.forEach((singleLink) => {
             const linkContainer = document.createElement('div');
             const link = document.createElement('a');
+            const btnOpenNews = document.createElement('button');
+
+            btnOpenNews.textContent = 'Посмотреть'
+            btnOpenNews.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+            btnOpenNews.setAttribute('data-id', singleLink.feedId);
+            btnOpenNews.setAttribute('data-bs-toggle', 'modal');
+            btnOpenNews.setAttribute('data-bs-target', '#modal');
+
+            btnOpenNews.addEventListener('click', (event) => renderModal(event, singleLink));
+
+            linkContainer.classList.add(
+              'list-group-item',
+              'd-flex',
+              'justify-content-between',
+              'align-items-start',
+              'border-0',
+              'border-end-0',
+            );
 
             link.setAttribute('href', `${singleLink.link}`);
             link.innerHTML = `${singleLink.title}`;
             linkContainer.append(link);
+            linkContainer.append(btnOpenNews);
             feedBlock.append(linkContainer);
           });
 
@@ -112,10 +153,29 @@ const buildStateWatcher = (state) => {
       linkForFeed.forEach((singleLink) => {
         const linkContainer = document.createElement('div');
         const link = document.createElement('a');
+        const btnOpenNews = document.createElement('button');
+
+        btnOpenNews.textContent = 'Посмотреть'
+        btnOpenNews.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+        btnOpenNews.setAttribute('data-id', singleLink.feedId);
+        btnOpenNews.setAttribute('data-bs-toggle', 'modal');
+        btnOpenNews.setAttribute('data-bs-target', '#modal');
+
+        btnOpenNews.addEventListener('click', (event) => renderModal(event, singleLink));
+
+        linkContainer.classList.add(
+          'list-group-item',
+          'd-flex',
+          'justify-content-between',
+          'align-items-start',
+          'border-0',
+          'border-end-0',
+        );
 
         link.setAttribute('href', `${singleLink.link}`);
         link.innerHTML = `${singleLink.title}`;
         linkContainer.append(link);
+        linkContainer.append(btnOpenNews);
         feedBlock.append(linkContainer);
       });
     }

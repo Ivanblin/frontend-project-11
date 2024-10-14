@@ -21,13 +21,6 @@ const linkValidator = (channels, link) => {
   }
 };
 
-fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent('https://news.ycombinator.com/rss')}`)
-  .then(response => {
-    if (response.ok) return response.json()
-    throw new Error('Network response was not ok.')
-  })
-  .then(data => console.log(data.contents));
-
 const updateFeed = (url, id, watchedState) => {
   axios
     .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
@@ -38,7 +31,6 @@ const updateFeed = (url, id, watchedState) => {
       const parsedPosts = newPosts.map((post) => ({ ...post, feedId: id }));
 
       const differentPosts = _.differenceWith(parsedPosts, oldPosts, _.isEqual);
-      console.log('differentPosts: ', differentPosts)
 
       watchedState.posts.push(...differentPosts);
     })
