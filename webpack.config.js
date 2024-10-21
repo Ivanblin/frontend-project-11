@@ -3,13 +3,26 @@ const path = require('path');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry: path.resolve(__dirname, './src/index.js'),
+  // entry: path.resolve(__dirname, './src/index.js'),
+  entry: './src/index.js',
+  // output: {
+  //   path: path.resolve(__dirname, 'dist'),
+  //   filename: '[name].bundle.js',
+  // },
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: '[name].bundle.js',
+    clean: true,
   },
+  // devServer: {
+  //   port: 4300,
+  // },
   devServer: {
-    port: 4300,
+    open: true,
+    client: {
+      overlay: {
+        warnings: false,
+        errors: true,
+      },
+    },
   },
   module: {
     rules: [
