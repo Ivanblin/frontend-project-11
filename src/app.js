@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import buildStateWatcher from './watchers';
 import parser from './parser';
 import en from './languages/en';
+import ru from './languages/ru';
 
 // const corsServer = 'https://cors-anywhere.herokuapp.com/';
 const updateTime = 5000;
@@ -62,17 +63,18 @@ const loadFeed = (url, watchedState, state, rssLink) => {
       setTimeout(() => updateFeed(url, feedId, watchedState), updateTime);
     })
     .catch(() => {
-      watchedState.feedLoader.errorsMessages = 'download error';
+      watchedState.feedLoader.errorsMessages = 'Ресурс не содержит валидный RSS';
       watchedState.feedLoader.state = 'error';
     });
 };
 
 export default () => {
   i18next.init({
-    lng: 'en',
+    lng: 'ru',
     debug: true,
     resources: {
       en,
+      ru
     },
   }).then(() => {
     const state = {
