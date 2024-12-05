@@ -48,7 +48,8 @@ const loadFeed = (url, watchedState, state, rssLink) => {
   watchedState.feedLoader.state = 'loading';
   axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
     .then((response) => {
-      const { title: feedTitle, posts: parsedPosts } = parser(response.data.contents);
+      try {
+        const { title: feedTitle, posts: parsedPosts } = parser(response.data.contents);
       const feedId = _.uniqueId();
 
       const posts = parsedPosts.map((post) => ({ ...post, feedId }));
@@ -65,9 +66,12 @@ const loadFeed = (url, watchedState, state, rssLink) => {
       watchedState.feedLoader.state = 'loaded';
       watchedState.form.state = 'filling';
       setTimeout(() => updateFeed(url, feedId, watchedState), updateTime);
+      } catch {
+        watchedState.feedLoader.errorsMessages = 'Ресурс не содержит валидный RSS';
+        watchedState.feedLoader.state = 'error';
+      }
     })
     .catch(() => {
-      // watchedState.feedLoader.errorsMessages = 'Ресурс не содержит валидный RSS';
       watchedState.feedLoader.errorsMessages = 'Ошибка сети';
       watchedState.feedLoader.state = 'error';
     });
