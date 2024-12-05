@@ -35,6 +35,10 @@ const updateFeed = (url, id, watchedState) => {
 
       watchedState.posts.push(...differentPosts);
     })
+    .catch(() => {
+      watchedState.feedLoader.errorsMessages = 'Ошибка сети';
+      watchedState.feedLoader.state = 'error';
+    })
     .finally(() => {
       setTimeout(() => updateFeed(url, id, watchedState), updateTime);
     });

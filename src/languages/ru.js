@@ -10,7 +10,7 @@ export default {
       validationError: {
         notOneOf: 'RSS уже существует',
         url: 'Ссылка должна быть валидным URL',
-        string: 'Link must be a string',
+        connectionError: 'Ошибка сети',
       },
     },
   },
