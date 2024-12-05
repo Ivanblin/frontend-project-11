@@ -121,7 +121,7 @@ const buildStateWatcher = (state) => {
           submitButton.disabled = false;
           statusBlock.classList.remove('text-success');
           statusBlock.classList.add('text-danger');
-          statusBlock.innerHTML = i18next.t(`фывфыв${state.feedLoader.errorsMessages}`);
+          statusBlock.innerHTML = i18next.t(`${state.feedLoader.errorsMessages}`);
           break;
         }
 

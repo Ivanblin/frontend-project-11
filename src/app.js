@@ -67,7 +67,8 @@ const loadFeed = (url, watchedState, state, rssLink) => {
       setTimeout(() => updateFeed(url, feedId, watchedState), updateTime);
     })
     .catch(() => {
-      watchedState.feedLoader.errorsMessages = 'Ресурс не содержит валидный RSS';
+      // watchedState.feedLoader.errorsMessages = 'Ресурс не содержит валидный RSS';
+      watchedState.feedLoader.errorsMessages = 'Ошибка сети';
       watchedState.feedLoader.state = 'error';
     });
 };
@@ -113,6 +114,8 @@ export default () => {
         watchedState.form.state = 'valid';
       } else {
         watchedState.form.errorsMessages = `validationError.${validationErrors.type}`;
+        console.log('validationErrors.type: ', validationErrors.type)
+        console.log('validationErrors: ', validationErrors)
         watchedState.form.state = 'invalid';
       }
 
