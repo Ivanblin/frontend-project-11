@@ -29,6 +29,7 @@ const buildStateWatcher = (state) => {
     const statusBlock = document.getElementById('status');
     const submitButton = document.getElementById('add-rss');
     const channelsContainer = document.getElementById('channels');
+    const feedContainer = document.getElementById('feed');
 
     if (path === 'form.state') {
       switch (value) {
@@ -73,14 +74,14 @@ const buildStateWatcher = (state) => {
 
           const lastAddedFeedNumber = state.feeds.length - 1;
           const { feedId, name: feedName } = state.feeds[lastAddedFeedNumber];
-          const feedBlock = document.createElement('div');
+          const postBlock = document.createElement('div');
 
-          feedBlock.setAttribute('id', feedId);
+          postBlock.setAttribute('id', feedId);
 
           const feedTitle = document.createElement('h2');
 
           feedTitle.innerHTML = feedName;
-          feedBlock.append(feedTitle);
+          postBlock.append(feedTitle);
 
           const linksForFeed = state.posts.filter((post) => post.feedId === feedId);
 
@@ -110,10 +111,10 @@ const buildStateWatcher = (state) => {
             link.innerHTML = `${singleLink.title}`;
             linkContainer.append(link);
             linkContainer.append(btnOpenNews);
-            feedBlock.append(linkContainer);
+            postBlock.append(linkContainer);
           });
 
-          channelsContainer.append(feedBlock);
+          channelsContainer.append(postBlock);
           break;
         }
 
@@ -130,14 +131,36 @@ const buildStateWatcher = (state) => {
       }
     }
 
+    
+    if (path === 'feeds') {
+      feedContainer.innerHTML = `<div class="card-body"><h2 class="card-title h4 fw-bold">Фиды</h2></div><ul class="list-group border-0 rounded-0"></ul>`;
+
+      const feedsList = feedContainer.querySelector('ul');
+
+      state.feeds.forEach((feed) => {
+        const listElement = document.createElement('li');
+        const feedHeader = document.createElement('h3');
+        const feedParagraph = document.createElement('p');
+  
+        listElement.classList.add('list-group-item', 'border-0', 'border-end-0');
+        feedHeader.classList.add('h6', 'm-0');
+        feedHeader.textContent = feed.name;
+        feedParagraph.classList.add('m-0', 'small', 'text-black-50');
+        feedParagraph.textContent = feed.description;
+        listElement.append(feedHeader, feedParagraph);
+        feedsList.append(listElement);
+      });
+    }
+
     if (path === 'posts') {
       const lastAddedPostNumber = state.posts.length - 1;
       const lastAddedFeedId = state.posts[lastAddedPostNumber].feedId;
-      const feedBlock = document.getElementById(lastAddedFeedId);
 
-      feedBlock.innerHTML = '';
+      const postBlock = document.getElementById(lastAddedFeedId);
 
-      const feedTitleBlock = document.createElement('h2');
+      postBlock.innerHTML = '';
+
+      const postTitleBlock = document.createElement('h2');
 
       const lastFeedName = state.feeds
         .filter((feed) => feed.feedId === lastAddedFeedId)
@@ -145,8 +168,8 @@ const buildStateWatcher = (state) => {
 
       const [feedTitle] = lastFeedName;
 
-      feedTitleBlock.innerHTML = feedTitle;
-      feedBlock.append(feedTitleBlock);
+      postTitleBlock.innerHTML = feedTitle;
+      postBlock.append(postTitleBlock);
 
       const linkForFeed = state.posts.filter((post) => post.feedId === lastAddedFeedId);
 
@@ -176,7 +199,7 @@ const buildStateWatcher = (state) => {
         link.innerHTML = `${singleLink.title}`;
         linkContainer.append(link);
         linkContainer.append(btnOpenNews);
-        feedBlock.append(linkContainer);
+        postBlock.append(linkContainer);
       });
     }
   });

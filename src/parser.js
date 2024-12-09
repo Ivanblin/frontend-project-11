@@ -12,6 +12,7 @@ const dataParser = (data) => {
   }
 
   const feedTitle = feedData.querySelector('channel title').textContent;
+  const feedDescription = feedData.querySelector('channel description').textContent;
   const items = feedData.querySelectorAll('channel item');
 
   const posts = [...items].map((singlePost) => {
@@ -29,7 +30,7 @@ const dataParser = (data) => {
 
     return post;
   });
-  return { title: feedTitle, posts };
+  return { title: feedTitle, posts, description: feedDescription };
 };
 
 export default dataParser;

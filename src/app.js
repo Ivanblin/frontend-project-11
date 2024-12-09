@@ -44,32 +44,40 @@ const updateFeed = (url, id, watchedState) => {
     });
 };
 
+function rssParce(xmlData) {
+  const parser = new DOMParser();
+  const data = parser.parseFromString(xmlData, 'text/xml');
+
+  return data;
+}
+
 const loadFeed = (url, watchedState, state, rssLink) => {
   watchedState.feedLoader.state = 'loading';
   axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
     .then((response) => {
       try {
-        const { title: feedTitle, posts: parsedPosts } = parser(response.data.contents);
-      const feedId = _.uniqueId();
+        const { title: feedTitle, posts: parsedPosts, description: feedDescription } = parser(response.data.contents);
+        const feedId = _.uniqueId();
 
-      const posts = parsedPosts.map((post) => ({ ...post, feedId }));
+        const posts = parsedPosts.map((post) => ({ ...post, feedId }));
 
-      state.posts.push(...posts);
+        state.posts.push(...posts);
 
-      const feed = {
-        link: rssLink,
-        feedId,
-        name: feedTitle,
-      };
+        const feed = {
+          link: rssLink,
+          feedId,
+          name: feedTitle,
+          description: feedDescription,
+        };
 
-      watchedState.feeds.push(feed);
-      watchedState.feedLoader.state = 'loaded';
-      watchedState.form.state = 'filling';
-      setTimeout(() => updateFeed(url, feedId, watchedState), updateTime);
-      } catch {
-        watchedState.feedLoader.errorsMessages = 'Ресурс не содержит валидный RSS';
-        watchedState.feedLoader.state = 'error';
-      }
+        watchedState.feeds.push(feed);
+        watchedState.feedLoader.state = 'loaded';
+        watchedState.form.state = 'filling';
+        setTimeout(() => updateFeed(url, feedId, watchedState), updateTime);
+        } catch {
+          watchedState.feedLoader.errorsMessages = 'Ресурс не содержит валидный RSS';
+          watchedState.feedLoader.state = 'error';
+        }
     })
     .catch(() => {
       watchedState.feedLoader.errorsMessages = 'Ошибка сети';
@@ -78,6 +86,8 @@ const loadFeed = (url, watchedState, state, rssLink) => {
 };
 
 export default () => {
+  const i18nInstance = i18next.createInstance();
+
   i18next.init({
     lng: 'ru',
     debug: true,
@@ -118,8 +128,6 @@ export default () => {
         watchedState.form.state = 'valid';
       } else {
         watchedState.form.errorsMessages = `validationError.${validationErrors.type}`;
-        console.log('validationErrors.type: ', validationErrors.type)
-        console.log('validationErrors: ', validationErrors)
         watchedState.form.state = 'invalid';
       }
 
