@@ -106,6 +106,7 @@ const buildStateWatcher = (state) => {
               'align-items-start',
               'border-0',
               'border-end-0',
+              'fw-bold'
             );
 
             link.setAttribute('href', `${singleLink.link}`);
