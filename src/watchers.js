@@ -10,7 +10,7 @@ const renderModal = (event, currentPost) => {
 
   const targetPost = event.target.parentElement.querySelector('a');
 
-  targetPost.classList.remove('fw-bold');
+  // targetPost.classList.remove('fw-bold');
   targetPost.classList.add('fw-normal', 'text-secondary');
   modalCloseBtn.textContent = 'Закрыть';
   modalCloseBtn.src = currentPost.link;

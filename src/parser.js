@@ -16,13 +16,13 @@ const dataParser = (data) => {
   const items = feedData.querySelectorAll('channel item');
 
   const posts = [...items].map((singlePost) => {
-    const singlePostTitle = singlePost.querySelector('title').textContent;
+    const postTitle = singlePost.querySelector('title').textContent;
     const singlePostLink = singlePost.querySelector('link').textContent;
     const singlePostDescription = singlePost.querySelector('description').textContent;
     const singlePostPubDate = singlePost.querySelector('pubDate').textContent;
 
     const post = {
-      title: singlePostTitle,
+      title: postTitle,
       link: singlePostLink,
       description: singlePostDescription,
       pubDate: singlePostPubDate,
