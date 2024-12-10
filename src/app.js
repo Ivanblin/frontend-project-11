@@ -75,6 +75,7 @@ const loadFeed = (url, watchedState, state, rssLink) => {
         watchedState.form.state = 'filling';
         setTimeout(() => updateFeed(url, feedId, watchedState), updateTime);
         } catch {
+          console.log('00000')
           watchedState.feedLoader.errorsMessages = 'Ресурс не содержит валидный RSS';
           watchedState.feedLoader.state = 'error';
         }

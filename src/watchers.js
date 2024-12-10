@@ -73,15 +73,16 @@ const buildStateWatcher = (state) => {
           statusBlock.classList.add('text-success');
 
           const lastAddedFeedNumber = state.feeds.length - 1;
-          const { feedId, name: feedName } = state.feeds[lastAddedFeedNumber];
+          // const { feedId, name: feedName } = state.feeds[lastAddedFeedNumber];
+          const { feedId } = state.feeds[lastAddedFeedNumber];
           const postBlock = document.createElement('div');
 
           postBlock.setAttribute('id', feedId);
 
-          const feedTitle = document.createElement('h2');
+          // const feedTitle = document.createElement('h2');
 
-          feedTitle.innerHTML = feedName;
-          postBlock.append(feedTitle);
+          // feedTitle.innerHTML = feedName;
+          // postBlock.append(feedTitle);
 
           const linksForFeed = state.posts.filter((post) => post.feedId === feedId);
 
