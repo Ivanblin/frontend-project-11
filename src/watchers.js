@@ -115,6 +115,7 @@ const buildStateWatcher = (state) => {
             link.setAttribute('href', `${singleLink.link}`);
             link.setAttribute('target', '_blank');
             link.addEventListener('click', (event) => {
+              visitedLinksPost.add(singleLink.link)
               event.target.classList.remove('fw-bold');
               event.target.classList.add('fw-normal', 'text-secondary');
             });
@@ -217,6 +218,7 @@ const buildStateWatcher = (state) => {
         link.addEventListener('click', (event) => {
           event.target.classList.remove('fw-bold');
           event.target.classList.add('fw-normal', 'text-secondary');
+          visitedLinksPost.add(singleLink.link)
         });
         linkContainer.append(link);
         linkContainer.append(btnOpenNews);
