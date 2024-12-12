@@ -113,6 +113,11 @@ const buildStateWatcher = (state) => {
             );
 
             link.setAttribute('href', `${singleLink.link}`);
+            link.setAttribute('target', '_blank');
+            link.addEventListener('click', (event) => {
+              event.target.classList.remove('fw-bold');
+              event.target.classList.add('fw-normal', 'text-secondary');
+            });
             link.innerHTML = `${singleLink.title}`;
             linkContainer.append(link);
             linkContainer.append(btnOpenNews);
@@ -206,8 +211,13 @@ const buildStateWatcher = (state) => {
         });
 
         link.setAttribute('href', `${singleLink.link}`);
+        link.setAttribute('target', '_blank');
         link.innerHTML = `${singleLink.title}`;
         btnOpenNews.addEventListener('click', (event) => renderModal(event, singleLink));
+        link.addEventListener('click', (event) => {
+          event.target.classList.remove('fw-bold');
+          event.target.classList.add('fw-normal', 'text-secondary');
+        });
         linkContainer.append(link);
         linkContainer.append(btnOpenNews);
         postBlock.append(linkContainer);
