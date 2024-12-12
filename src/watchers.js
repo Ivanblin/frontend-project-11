@@ -1,7 +1,10 @@
 import onChange from 'on-change';
 import i18next from 'i18next';
 
+let visitedLinksPost = new Set()
+
 const renderModal = (event, currentPost) => {
+  visitedLinksPost.add(currentPost.link)
   const modalTitle = document.querySelector('.modal-title');
   const modalDescription = document.querySelector('.modal-body');
   const modalPreviewBtn = document.querySelector('.modal-btn-preview');
@@ -10,7 +13,7 @@ const renderModal = (event, currentPost) => {
 
   const targetPost = event.target.parentElement.querySelector('a');
 
-  // targetPost.classList.remove('fw-bold');
+  targetPost.classList.remove('fw-bold');
   targetPost.classList.add('fw-normal', 'text-secondary');
   modalCloseBtn.textContent = 'Закрыть';
   modalCloseBtn.src = currentPost.link;
@@ -162,31 +165,29 @@ const buildStateWatcher = (state) => {
 
       postBlock.innerHTML = '';
 
-      const postTitleBlock = document.createElement('h2');
+      // const postTitleBlock = document.createElement('h2');
 
-      const lastFeedName = state.feeds
-        .filter((feed) => feed.feedId === lastAddedFeedId)
-        .map((feed) => feed.name);
+      // const lastFeedName = state.feeds
+      //   .filter((feed) => feed.feedId === lastAddedFeedId)
+      //   .map((feed) => feed.name);
 
-      const [feedTitle] = lastFeedName;
+      // const [feedTitle] = lastFeedName;
 
-      postTitleBlock.innerHTML = feedTitle;
-      postBlock.append(postTitleBlock);
+      // postTitleBlock.innerHTML = feedTitle;
+      // postBlock.append(postTitleBlock);
 
       const linkForFeed = state.posts.filter((post) => post.feedId === lastAddedFeedId);
 
       linkForFeed.forEach((singleLink) => {
         const linkContainer = document.createElement('div');
         const link = document.createElement('a');
+        link.classList.add('fw-bold');
         const btnOpenNews = document.createElement('button');
 
         btnOpenNews.textContent = 'Посмотреть'
         btnOpenNews.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-        btnOpenNews.setAttribute('data-id', singleLink.feedId);
         btnOpenNews.setAttribute('data-bs-toggle', 'modal');
         btnOpenNews.setAttribute('data-bs-target', '#modal');
-
-        btnOpenNews.addEventListener('click', (event) => renderModal(event, singleLink));
 
         linkContainer.classList.add(
           'list-group-item',
@@ -197,8 +198,16 @@ const buildStateWatcher = (state) => {
           'border-end-0',
         );
 
+        visitedLinksPost.forEach((value) => {
+          if (value == singleLink.link) {
+            link.classList.remove('fw-bold');
+            link.classList.add('fw-normal', 'text-secondary');
+          }
+        });
+
         link.setAttribute('href', `${singleLink.link}`);
         link.innerHTML = `${singleLink.title}`;
+        btnOpenNews.addEventListener('click', (event) => renderModal(event, singleLink));
         linkContainer.append(link);
         linkContainer.append(btnOpenNews);
         postBlock.append(linkContainer);
