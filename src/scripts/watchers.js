@@ -47,7 +47,6 @@ function renderRss(path, value, prevValue, i18nInstance) {
 
   if (path === 'feeds') {
     const feedsToRender = value.filter((feed) => !prevValue.includes(feed));
-    console.log('feedsToRender: ', feedsToRender)
 
     feedsToRender.forEach((feed) => {
       const listElement = document.createElement('li');
@@ -122,9 +121,8 @@ function renderModal(event, currentPost, i18nInstance) {
   modalDescription.innerHTML = currentPost.postDescription;
 
   modalPreviewBtn.addEventListener('click', () => {
-    console.log('=======')
     window.open(currentPost.postLink, '_blank');
   });
 };
 
-export { renderValidation, renderLanguage, renderRss };
+export { renderValidation, renderLanguage, renderRss }

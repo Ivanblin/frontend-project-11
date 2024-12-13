@@ -84,11 +84,9 @@ export default () => {
       .then((response) => {
         try {
           const data = rssParce(response.data.contents);
-          console.log('data: ', data)
           const id = nanoid(6);
           const feedTitle = data.querySelector('channel > title').textContent;
           const feedDescription = data.querySelector('channel > description').textContent;
-          console.log('feedDescription: ', feedDescription)
           const posts = data.querySelectorAll('channel > item');
 
           watchedState.feeds.push({
