@@ -123,6 +123,6 @@ function renderModal(event, currentPost, i18nInstance) {
   modalPreviewBtn.addEventListener('click', () => {
     window.open(currentPost.postLink, '_blank');
   });
-};
+}
 
-export { renderValidation, renderLanguage, renderRss }
+export { renderValidation, renderLanguage, renderRss };
