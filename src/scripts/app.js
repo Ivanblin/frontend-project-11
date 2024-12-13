@@ -82,7 +82,6 @@ export default () => {
     axios
       .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
       .then((response) => {
-        console.log('response: ', response)
         try {
           const data = rssParce(response.data.contents);
           console.log('data: ', data)

@@ -38,7 +38,6 @@ function renderRss(path, value, prevValue, i18nInstance) {
   const postsContainer = document.querySelector('.posts');
 
   if (path === 'feeds' && value.length < 2) {
-    console.log('i18nInstance', i18nInstance.t('rss.feeds'))
     feedsContainer.innerHTML = `<div class="card-body"><h2 class="card-title h4 fw-bold">${i18nInstance.t('rss.feeds')}</h2></div><ul class="list-group border-0 rounded-0"></ul>`;
     postsContainer.innerHTML = `<div class="card border-0"><div class="card-body"><h2 class="card-title h4 fw-bold">${i18nInstance.t('rss.posts')}</h2></div><ul class="list-group border-0 rounded-0"></ul></div>`;
   }
@@ -61,11 +60,9 @@ function renderRss(path, value, prevValue, i18nInstance) {
       feedParagraph.classList.add('m-0', 'small', 'text-black-50');
       feedParagraph.textContent = feed.description;
       listElement.append(feedHeader, feedParagraph);
-      console.log('listElement: ', listElement)
       feedsList.append(listElement);
     });
   }
-  console.log('asdasdadsasdasd22222')
 
   if (path === 'posts') {
     const postsToRender = value.filter((feed) => !prevValue.includes(feed));
@@ -95,7 +92,6 @@ function renderRss(path, value, prevValue, i18nInstance) {
       btn.setAttribute('data-bs-target', '#modal');
       btn.textContent = i18nInstance.t('rss.linkBtn');
       listElement.append(postName, btn);
-      console.log('asdasdadsasdasd')
 
       btn.addEventListener('click', (event) => renderModal(event, post, i18nInstance));
       postName.addEventListener('click', (event) => {
@@ -129,6 +125,6 @@ function renderModal(event, currentPost, i18nInstance) {
     console.log('=======')
     window.open(currentPost.postLink, '_blank');
   });
-}
+};
 
 export { renderValidation, renderLanguage, renderRss };
