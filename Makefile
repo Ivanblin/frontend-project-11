@@ -1,12 +1,14 @@
 install:
-	npm install
+	npm ci
+
+develop:
+	npm run dev
 
 lint:
 	npx eslint .
-	
-build:
-	rm -rf dist
-	NODE_ENV=production npx webpack
 
-start:
-	npm start
+build:
+	NODE_ENV=production npm run build
+
+test:
+	echo no tests
