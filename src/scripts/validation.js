@@ -1,12 +1,21 @@
 import * as yup from 'yup';
 
-const validateUrl = (url, feeds) => {
-  const schema = yup.string()
-    .required('Не должно быть пустым')
-    .url('Ссылка должна быть валидным URL')
-    .notOneOf(feeds, 'RSS уже существует');
-
-  return schema.validate(url);
+export const setupYup = (i18nInstance) => {
+  yup.setLocale({
+    mixed: {
+      required: () => i18nInstance.t('errors.required'),
+      notOneOf: () => i18nInstance.t('errors.notOneOf'),
+    },
+    string: {
+      url: () => i18nInstance.t('errors.url'),
+    },
+  });
 };
 
-export default validateUrl;
+export const validateUrl = (url, feeds) => {
+  const schema = yup.string()
+    .required()
+    .url()
+    .notOneOf(feeds);
+  return schema.validate(url);
+};

@@ -1,17 +1,116 @@
 export default class View {
-  constructor() {
+  constructor(i18nInstance) {
+    this.i18n = i18nInstance;
     this.form = document.querySelector('.rss-form');
     this.input = document.getElementById('url-input');
     this.feedback = document.querySelector('.feedback');
+    this.feedsContainer = document.querySelector('.feeds');
+    this.postsContainer = document.querySelector('.posts');
+    this.submitButton = this.form.querySelector('button[type="submit"]');
   }
 
   init() {
+    this.updateTexts();
     this.input.focus();
   }
 
-  showError(message) {
+  updateTexts() {
+    const elements = document.querySelectorAll('[data-i18n]');
+    elements.forEach(element => {
+      const key = element.dataset.i18n;
+      element.textContent = this.i18n.t(key);
+    });
+  }
+
+  render({ feeds, posts }) {
+    this.renderFeeds(feeds);
+    this.renderPosts(posts);
+  }
+
+  renderFeeds(feeds) {
+    this.feedsContainer.innerHTML = '';
+
+    if (feeds.length === 0) return;
+
+    const card = document.createElement('div');
+    card.className = 'card border-0';
+    
+    const cardBody = document.createElement('div');
+    cardBody.className = 'card-body';
+    
+    const title = document.createElement('h2');
+    title.className = 'card-title h4';
+    title.textContent = this.i18n.t('feeds');
+    
+    cardBody.append(title);
+    card.append(cardBody);
+    
+    const listGroup = document.createElement('ul');
+    listGroup.className = 'list-group border-0 rounded-0';
+    
+    feeds.forEach(feed => {
+      const item = document.createElement('li');
+      item.className = 'list-group-item border-0 border-end-0';
+      
+      const feedTitle = document.createElement('h3');
+      feedTitle.className = 'h6 m-0';
+      feedTitle.textContent = feed.title;
+      
+      const description = document.createElement('p');
+      description.className = 'm-0 small text-black-50';
+      description.textContent = feed.description;
+      
+      item.append(feedTitle, description);
+      listGroup.append(item);
+    });
+    
+    card.append(listGroup);
+    this.feedsContainer.append(card);
+  }
+
+  renderPosts(posts) {
+    this.postsContainer.innerHTML = '';
+
+    if (posts.length === 0) return;
+
+    const card = document.createElement('div');
+    card.className = 'card border-0';
+    
+    const cardBody = document.createElement('div');
+    cardBody.className = 'card-body';
+    
+    const title = document.createElement('h2');
+    title.className = 'card-title h4';
+    title.textContent = this.i18n.t('posts');
+    
+    cardBody.append(title);
+    card.append(cardBody);
+    
+    const listGroup = document.createElement('ul');
+    listGroup.className = 'list-group border-0 rounded-0';
+    
+    posts.forEach(post => {
+      const item = document.createElement('li');
+      item.className = 'list-group-item d-flex justify-content-between align-items-start border-0 border-end-0';
+      
+      const link = document.createElement('a');
+      link.href = post.link;
+      link.className = 'fw-bold';
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = post.title;
+      
+      item.append(link);
+      listGroup.append(item);
+    });
+    
+    card.append(listGroup);
+    this.postsContainer.append(card);
+  }
+
+  showError(key) {
     this.input.classList.add('is-invalid');
-    this.feedback.textContent = message;
+    this.feedback.textContent = this.i18n.t(key);
   }
 
   clearForm() {
@@ -19,5 +118,15 @@ export default class View {
     this.input.classList.remove('is-invalid');
     this.feedback.textContent = '';
     this.input.focus();
+  }
+
+  disableForm() {
+    this.input.disabled = true;
+    this.submitButton.disabled = true;
+  }
+
+  enableForm() {
+    this.input.disabled = false;
+    this.submitButton.disabled = false;
   }
 }

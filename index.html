@@ -16,10 +16,10 @@
           </div>
           <div class="modal-body text-break"></div>
           <div class="modal-footer">
-            <a class="btn btn-primary full-article" href="#" role="button" target="_blank" rel="noopener noreferrer">
+            <a class="btn btn-primary full-article" data-i18n="readFull" href="#" role="button" target="_blank" rel="noopener noreferrer">
               Читать полностью
             </a>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="close">Закрыть</button>
           </div>
         </div>
       </div>
@@ -28,22 +28,22 @@
       <section class="container-fluid bg-dark p-5">
         <div class="row">
           <div class="col-md-10 col-lg-8 mx-auto text-white">
-            <h1 class="display-3 mb-0">RSS агрегатор</h1>
-            <p class="lead">Начните читать RSS сегодня! Это легко, это красиво.</p>
+            <h1 class="display-3 mb-0" data-i18n="rssAggregator">RSS агрегатор</h1>
+            <p class="lead" data-i18n="startReading">Начните читать RSS сегодня! Это легко, это красиво.</p>
             <form action="" class="rss-form text-body">
               <div class="row">
                 <div class="col">
                   <div class="form-floating">
                     <input id="url-input" autofocus="" type="text" required="" name="url" aria-label="url" class="form-control w-100" placeholder="ссылка RSS" autocomplete="off">
-                    <label for="url-input">Ссылка RSS</label>
+                    <label for="url-input" data-i18n="rssLink">Ссылка RSS</label>
                   </div>
                 </div>
                 <div class="col-auto">
-                  <button type="submit" aria-label="add" class="h-100 btn btn-lg btn-primary px-sm-5">Добавить</button>
+                  <button type="submit" data-i18n="add" aria-label="add" class="h-100 btn btn-lg btn-primary px-sm-5">Добавить</button>
                 </div>
               </div>
             </form>
-            <p class="mt-2 mb-0 text-muted">Пример: https://lorem-rss.hexlet.app/feed</p>
+            <p class="mt-2 mb-0 text-muted" data-i18n="example">Пример: https://lorem-rss.hexlet.app/feed</p>
             <p class="feedback m-0 position-absolute small text-danger"></p>
           </div>
         </div>
@@ -62,6 +62,7 @@
     <footer class="footer border-top py-3 mt-5 bg-light">
       <div class="container-xl">
         <div class="text-center">
+          <span data-i18n="createdBy"></span>
           created by
           <a href="https://ru.hexlet.io/professions/frontend/projects/11" target="_blank">Hexlet</a>
         </div>
