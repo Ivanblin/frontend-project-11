@@ -1,19 +1,21 @@
 {
-  "rssAggregator": "RSS агрегатор",
-  "startReading": "Начните читать RSS сегодня! Это легко, это красиво.",
-  "rssLink": "Ссылка RSS",
-  "add": "Добавить",
-  "example": "Пример: https://lorem-rss.hexlet.app/feed",
-  "readFull": "Читать полностью",
-  "close": "Закрыть",
-  "createdBy": "created by",
-  "feeds": "Фиды",
-  "posts": "Посты",
-  "errors": {
-    "required": "Не должно быть пустым",
-    "url": "Ссылка должна быть валидным URL",
-    "notOneOf": "RSS уже существует",
+    "rssAggregator": "RSS агрегатор",
+    "startReading": "Начните читать RSS сегодня! Это легко, это красиво.",
+    "rssLink": "Ссылка RSS",
+    "add": "Добавить",
+    "example": "Пример: https://lorem-rss.hexlet.app/feed",
+    "readFull": "Читать полностью",
+    "close": "Закрыть",
+    "createdBy": "created by",
+    "feeds": "Фиды",
+    "posts": "Посты",
+    "errors": {
+        "required": "Не должно быть пустым",
+        "url": "Ссылка должна быть валидным URL",
+        "notOneOf": "RSS уже существует",
+        "networkerror": "Ошибка сети. Проверьте подключение и повторите попытку",
+        "parseerror": "Ошибка парсинга RSS. Проверьте корректность ссылки"
+    },
     "networkerror": "Ошибка сети. Проверьте подключение и повторите попытку",
     "parseerror": "Ошибка парсинга RSS. Проверьте корректность ссылки"
-  }
 }

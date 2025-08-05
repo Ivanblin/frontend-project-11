@@ -1,19 +1,21 @@
 {
-  "rssAggregator": "RSS Aggregator",
-  "startReading": "Start reading RSS today! It's easy, it's beautiful.",
-  "rssLink": "RSS link",
-  "add": "Add",
-  "example": "Example: https://lorem-rss.hexlet.app/feed",
-  "readFull": "Read full article",
-  "close": "Close",
-  "createdBy": "created by",
-  "feeds": "Feeds",
-  "posts": "Posts",
-  "errors": {
-    "required": "Should not be empty",
-    "url": "Must be a valid URL",
-    "notOneOf": "RSS already exists",
+    "rssAggregator": "RSS Aggregator",
+    "startReading": "Start reading RSS today! It's easy, it's beautiful.",
+    "rssLink": "RSS link",
+    "add": "Add",
+    "example": "Example: https://lorem-rss.hexlet.app/feed",
+    "readFull": "Read full article",
+    "close": "Close",
+    "createdBy": "created by",
+    "feeds": "Feeds",
+    "posts": "Posts",
+    "errors": {
+        "required": "Should not be empty",
+        "url": "Must be a valid URL",
+        "notOneOf": "RSS already exists",
+        "networkerror": "Network error. Check your connection and try again",
+        "parseerror": "RSS parsing error. Check the link validity"
+    },
     "networkerror": "Network error. Check your connection and try again",
     "parseerror": "RSS parsing error. Check the link validity"
-  }
 }

@@ -1,17 +1,29 @@
+// Улучшенная обработка ошибок
 export const fetchRss = async (url) => {
   const proxyUrl = `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`;
   
   try {
-    const response = await fetch(proxyUrl);
+    const response = await fetch(proxyUrl, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     
     if (!response.ok) {
-      throw new Error('NetworkError');
+      const error = new Error('NetworkError');
+      error.name = 'NetworkError';
+      throw error;
     }
     
     const data = await response.json();
     return data.contents;
   } catch (error) {
-    throw new Error('NetworkError');
+    if (error.name !== 'NetworkError') {
+      const networkError = new Error('NetworkError');
+      networkError.name = 'NetworkError';
+      throw networkError;
+    }
+    throw error;
   }
 };
 
@@ -20,10 +32,12 @@ export const parseRss = (xmlString) => {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
     
-    // Проверка на ошибки парсинга
+    // Проверка ошибок парсинга
     const errorNode = xmlDoc.querySelector('parsererror');
     if (errorNode) {
-      throw new Error('ParseError');
+      const error = new Error('ParseError');
+      error.name = 'ParseError';
+      throw error;
     }
     
     // Извлечение данных фида
@@ -43,6 +57,11 @@ export const parseRss = (xmlString) => {
     
     return { feed, posts };
   } catch (error) {
-    throw new Error('ParseError');
+    if (error.name !== 'ParseError') {
+      const parseError = new Error('ParseError');
+      parseError.name = 'ParseError';
+      throw parseError;
+    }
+    throw error;
   }
 };

@@ -15,63 +15,110 @@ const initApp = (i18nInstance) => {
     ui: {
       activeFeed: null,
     },
+    timers: {}, // Для хранения таймеров обновления
   };
 
   const view = new View(i18nInstance);
   view.init(state);
 
+  // Функция для добавления новых постов
+  const addNewPosts = (newPosts, feedId) => {
+    const existingLinks = new Set(state.posts.map(post => post.link));
+    const uniqueNewPosts = newPosts.filter(post => !existingLinks.has(post.link));
+
+    if (uniqueNewPosts.length === 0) return [];
+
+    const postsWithMeta = uniqueNewPosts.map(post => ({
+      ...post,
+      id: `${feedId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      feedId,
+      viewed: false,
+    }));
+
+    state.posts = [...postsWithMeta, ...state.posts];
+    return postsWithMeta;
+  };
+
+  // Функция обновления фида
+  const updateFeed = async (feedId) => {
+    const feed = state.feeds.find(f => f.id === feedId);
+    if (!feed) return;
+
+    try {
+      const xmlString = await fetchRss(feed.url);
+      const { posts: newPosts } = parseRss(xmlString);
+      const addedPosts = addNewPosts(newPosts, feedId);
+
+      if (addedPosts.length > 0) {
+        view.renderPosts(state.posts);
+      }
+    } catch (error) {
+      console.error(`Ошибка обновления фида ${feedId}:`, error);
+    } finally {
+      // Планируем следующее обновление через 5 секунд
+      state.timers[feedId] = setTimeout(() => updateFeed(feedId), 5000);
+    }
+  };
+
+  // Запуск периодического обновления
+  const startFeedUpdates = (feedId) => {
+    // Останавливаем предыдущий таймер, если был
+    if (state.timers[feedId]) {
+      clearTimeout(state.timers[feedId]);
+    }
+    // Первый запуск сразу
+    updateFeed(feedId);
+  };
+
+  // Обработчик отправки формы
   view.form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const url = formData.get('url').trim();
 
     try {
-      // Валидация URL
+      // Валидация
       await validateUrl(url, state.feeds.map(feed => feed.url));
-      
-      // Начало загрузки
       state.form.status = 'loading';
       view.disableForm();
-      
-      // Загрузка и парсинг RSS
+
+      // Загрузка данных
       const xmlString = await fetchRss(url);
       const { feed, posts } = parseRss(xmlString);
       
-      // Генерация ID для нового фида
+      // Создание фида
       const feedId = Date.now().toString();
-      
-      // Добавление фида
       const newFeed = {
         id: feedId,
         url,
         title: feed.title,
         description: feed.description,
       };
-      state.feeds.push(newFeed);
       
-      // Добавление постов
+      // Добавление фида и постов
+      state.feeds.push(newFeed);
       const newPosts = posts.map(post => ({
         ...post,
-        id: `${feedId}-${Date.now()}`,
+        id: `${feedId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
         feedId,
         viewed: false,
       }));
       state.posts = [...newPosts, ...state.posts];
       
-      // Успешное завершение
+      // Обновление UI
       state.form.status = 'added';
       state.form.error = null;
-      state.ui.activeFeed = feedId;
-      
       view.clearForm();
       view.render({ feeds: state.feeds, posts: state.posts });
+      
+      // Запуск отслеживания обновлений
+      startFeedUpdates(feedId);
     } catch (error) {
       state.form.status = 'error';
       state.form.error = error.message;
       
-      // Обработка различных типов ошибок
-      if (error.message === 'NetworkError' || error.message === 'ParseError') {
-        view.showError(`errors.${error.message.toLowerCase()}`);
+      if (error.name === 'NetworkError' || error.name === 'ParseError') {
+        view.showError(`errors.${error.name.toLowerCase()}`);
       } else {
         view.showError(error.message);
       }
@@ -80,6 +127,7 @@ const initApp = (i18nInstance) => {
     }
   });
 
+  // Сброс ошибки при вводе
   view.input.addEventListener('input', () => {
     if (state.form.status === 'error') {
       view.input.classList.remove('is-invalid');
