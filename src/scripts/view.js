@@ -19,6 +19,12 @@ export default class View {
     this.input.focus();
   }
 
+  showSuccess(message) {
+    this.feedback.textContent = message;
+    this.feedback.classList.add('text-success');
+    // this.feedback.classList.add('text-danger');
+  }
+
   updateTexts() {
     const elements = document.querySelectorAll('[data-i18n]');
     elements.forEach(element => {
@@ -144,6 +150,8 @@ export default class View {
 
   showError(key) {
     this.input.classList.add('is-invalid');
+    this.feedback.classList.remove('text-success');
+    this.feedback.classList.add('text-danger');
     this.feedback.textContent = this.i18n.t(key);
   }
 
@@ -151,6 +159,7 @@ export default class View {
     this.input.value = '';
     this.input.classList.remove('is-invalid');
     this.feedback.textContent = '';
+    this.feedback.classList.remove('text-success', 'text-danger');
     this.input.focus();
   }
 

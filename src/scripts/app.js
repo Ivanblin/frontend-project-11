@@ -113,6 +113,8 @@ const initApp = (i18nInstance) => {
       
       // Запуск отслеживания обновлений
       startFeedUpdates(feedId);
+      view.showSuccess('RSS успешно загружен');
+      // view.showSuccess(this.i18n.t('success'));
     } catch (error) {
       state.form.status = 'error';
       state.form.error = error.message;
