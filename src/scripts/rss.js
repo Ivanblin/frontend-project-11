@@ -1,4 +1,3 @@
-// Улучшенная обработка ошибок
 export const fetchRss = async (url) => {
   const proxyUrl = `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`;
   

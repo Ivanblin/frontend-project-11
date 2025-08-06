@@ -22,7 +22,6 @@ export default class View {
   showSuccess(message) {
     this.feedback.textContent = message;
     this.feedback.classList.add('text-success');
-    // this.feedback.classList.add('text-danger');
   }
 
   updateTexts() {
@@ -107,7 +106,7 @@ export default class View {
       const link = document.createElement('a');
       link.href = post.link;
       // Обновляем классы в зависимости от просмотра
-      link.className = post.viewed ? 'fw-normal' : 'fw-bold';
+      link.className = post.viewed ? 'fw-normal link-secondary' : 'fw-bold';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.textContent = post.title;
@@ -124,9 +123,6 @@ export default class View {
       previewButton.setAttribute('data-id', post.feedId);
       previewButton.setAttribute('data-bs-toggle', 'modal');
       previewButton.setAttribute('data-bs-target', '#modal');
-      // previewButton.type = 'button';
-      // previewButton.className = 'btn btn-outline-primary btn-sm';
-      // previewButton.textContent = this.i18n.t('preview');
       previewButton.dataset.id = post.id;
       
       const buttonContainer = document.createElement('div');

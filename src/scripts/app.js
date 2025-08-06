@@ -15,7 +15,7 @@ const initApp = (i18nInstance) => {
     ui: {
       activeFeed: null,
     },
-    timers: {}, // Для хранения таймеров обновления
+    timers: {},
   };
 
   const view = new View(i18nInstance);
@@ -50,6 +50,19 @@ const initApp = (i18nInstance) => {
       const addedPosts = addNewPosts(newPosts, feedId);
 
       if (addedPosts.length > 0) {
+        // Сохраняем состояние просмотра перед обновлением
+        const viewedLinks = new Set();
+        state.posts.forEach(post => {
+          if (post.viewed) viewedLinks.add(post.link);
+        });
+
+        // Обновляем состояние для новых постов
+        state.posts.forEach(post => {
+          if (viewedLinks.has(post.link)) {
+            post.viewed = true;
+          }
+        });
+
         view.renderPosts(state.posts);
       }
     } catch (error) {
@@ -114,7 +127,6 @@ const initApp = (i18nInstance) => {
       // Запуск отслеживания обновлений
       startFeedUpdates(feedId);
       view.showSuccess('RSS успешно загружен');
-      // view.showSuccess(this.i18n.t('success'));
     } catch (error) {
       state.form.status = 'error';
       state.form.error = error.message;
@@ -138,23 +150,40 @@ const initApp = (i18nInstance) => {
   });
 
   view.postsContainer.addEventListener('click', (e) => {
-    const previewButton = e.target.closest('[data-id]');
-    if (!previewButton) return;
-    
-    const postId = previewButton.dataset.id;
-    const post = state.posts.find(p => p.id === postId);
-    
-    if (post) {
-      // Помечаем пост как просмотренный
-      post.viewed = true;
+    // Обработка клика на ссылке
+    const postLink = e.target.closest('a');
+    if (postLink) {
+      const postId = postLink.dataset.id;
+      const post = state.posts.find(p => p.id === postId);
       
-      // Обновляем UI
-      const postLink = previewButton.closest('li').querySelector('a');
-      postLink.classList.replace('fw-bold', 'fw-normal');
-      postLink.classList.add('link-secondary');
+      if (post) {
+        post.viewed = true;
+        postLink.classList.remove('fw-bold');
+        postLink.classList.add('fw-normal', 'link-secondary');
+      }
+    }
+    
+    // Обработка кнопки предпросмотра
+    const previewButton = e.target.closest('button[data-id]');
+    if (previewButton) {
+      const postId = previewButton.dataset.id;
+      const post = state.posts.find(p => p.id === postId);
       
-      // Показываем модальное окно
-      view.showPostModal(post);
+      if (post) {
+        // Помечаем пост как просмотренный
+        post.viewed = true;
+        
+        // Обновляем UI
+        const postElement = previewButton.closest('li');
+        const postLink = postElement.querySelector('a');
+        if (postLink) {
+          postLink.classList.remove('fw-bold');
+          postLink.classList.add('fw-normal', 'link-secondary');
+        }
+        
+        // Показываем модальное окно
+        view.showPostModal(post);
+      }
     }
   });
 };
