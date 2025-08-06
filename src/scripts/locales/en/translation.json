@@ -9,14 +9,13 @@
     "createdBy": "created by",
     "feeds": "Feeds",
     "posts": "Posts",
+    "success": "RSS uploaded successfully",
     "errors": {
         "required": "Should not be empty",
         "url": "Must be a valid URL",
         "notOneOf": "RSS already exists",
         "networkerror": "Network error. Check your connection and try again",
-        "parseerror": "RSS parsing error. Check the link validity"
+        "parseerror": "The resource does not contain valid RSS"
     },
-    "networkerror": "Network error. Check your connection and try again",
-    "parseerror": "RSS parsing error. Check the link validity",
     "preview": "Preview"
 }
