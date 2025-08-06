@@ -111,6 +111,11 @@ export default class View {
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.textContent = post.title;
+
+      link.addEventListener('click', (event) => {
+        event.target.classList.remove('fw-bold');
+        event.target.classList.add('fw-normal', 'text-secondary');
+      });
       
       // Добавляем кнопку предпросмотра
       const previewButton = document.createElement('button');
@@ -144,8 +149,6 @@ export default class View {
     this.modalTitle.textContent = post.title;
     this.modalBody.textContent = post.description;
     this.modalFullArticleLink.href = post.link;
-
-    modal.show();
   }
 
   showError(key) {
