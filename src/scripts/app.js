@@ -134,6 +134,27 @@ const initApp = (i18nInstance) => {
       state.form.status = 'filling';
     }
   });
+
+  view.postsContainer.addEventListener('click', (e) => {
+    const previewButton = e.target.closest('[data-id]');
+    if (!previewButton) return;
+    
+    const postId = previewButton.dataset.id;
+    const post = state.posts.find(p => p.id === postId);
+    
+    if (post) {
+      // Помечаем пост как просмотренный
+      post.viewed = true;
+      
+      // Обновляем UI
+      const postLink = previewButton.closest('li').querySelector('a');
+      postLink.classList.replace('fw-bold', 'fw-normal');
+      postLink.classList.add('link-secondary');
+      
+      // Показываем модальное окно
+      view.showPostModal(post);
+    }
+  });
 };
 
 export default initApp;

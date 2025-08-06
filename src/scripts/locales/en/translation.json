@@ -17,5 +17,6 @@
         "parseerror": "RSS parsing error. Check the link validity"
     },
     "networkerror": "Network error. Check your connection and try again",
-    "parseerror": "RSS parsing error. Check the link validity"
+    "parseerror": "RSS parsing error. Check the link validity",
+    "preview": "Preview"
 }

@@ -7,6 +7,11 @@ export default class View {
     this.feedsContainer = document.querySelector('.feeds');
     this.postsContainer = document.querySelector('.posts');
     this.submitButton = this.form.querySelector('button[type="submit"]');
+
+    this.modal = document.getElementById('modal');
+    this.modalTitle = this.modal.querySelector('.modal-title');
+    this.modalBody = this.modal.querySelector('.modal-body');
+    this.modalFullArticleLink = this.modal.querySelector('.full-article');
   }
 
   init() {
@@ -95,17 +100,46 @@ export default class View {
       
       const link = document.createElement('a');
       link.href = post.link;
-      link.className = 'fw-bold';
+      // Обновляем классы в зависимости от просмотра
+      link.className = post.viewed ? 'fw-normal' : 'fw-bold';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.textContent = post.title;
       
-      item.append(link);
+      // Добавляем кнопку предпросмотра
+      const previewButton = document.createElement('button');
+      previewButton.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+      previewButton.textContent = this.i18n.t('preview');
+      previewButton.setAttribute('data-id', post.feedId);
+      previewButton.setAttribute('data-bs-toggle', 'modal');
+      previewButton.setAttribute('data-bs-target', '#modal');
+      // previewButton.type = 'button';
+      // previewButton.className = 'btn btn-outline-primary btn-sm';
+      // previewButton.textContent = this.i18n.t('preview');
+      previewButton.dataset.id = post.id;
+      
+      const buttonContainer = document.createElement('div');
+      buttonContainer.className = 'ms-2';
+      buttonContainer.append(previewButton);
+      
+      const wrapper = document.createElement('div');
+      wrapper.className = 'd-flex justify-content-between w-100';
+      wrapper.append(link, buttonContainer);
+      
+      item.append(wrapper);
       listGroup.append(item);
     });
     
     card.append(listGroup);
     this.postsContainer.append(card);
+  }
+
+  showPostModal(post) {
+    this.modalTitle.textContent = post.title;
+    this.modalBody.textContent = post.description;
+    this.modalFullArticleLink.href = post.link;
+
+    modal.show();
   }
 
   showError(key) {
