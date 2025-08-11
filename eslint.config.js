@@ -1,9 +1,15 @@
-import js from '@eslint/js';
-import globals from 'globals';
-import { defineConfig } from 'eslint/config';
+import 'normalize.css'
+import 'bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import initI18n from './scripts/i18n.js'
+import initApp from './scripts/app.js'
 
-
-export default defineConfig([
-  { files: ['**/*.{js,mjs,cjs}'], plugins: { js }, extends: ['js/recommended'] },
-  { files: ['**/*.{js,mjs,cjs}'], languageOptions: { globals: globals.browser } },
-]);
+(async () => {
+  try {
+    const i18nInstance = await initI18n()
+    initApp(i18nInstance)
+  } 
+  catch (e) {
+    console.error('Application initialization failed:', e)
+  }
+})()

@@ -65,9 +65,11 @@ const initApp = (i18nInstance) => {
 
         view.renderPosts(state.posts)
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error(`Ошибка обновления фида ${feedId}:`, error)
-    } finally {
+    }
+    finally {
       // Планируем следующее обновление через 5 секунд
       state.timers[feedId] = setTimeout(() => updateFeed(feedId), 5000)
     }
@@ -98,7 +100,7 @@ const initApp = (i18nInstance) => {
       // Загрузка данных
       const xmlString = await fetchRss(url)
       const { feed, posts } = parseRss(xmlString)
-      
+
       // Создание фида
       const feedId = Date.now().toString()
       const newFeed = {
@@ -107,7 +109,7 @@ const initApp = (i18nInstance) => {
         title: feed.title,
         description: feed.description,
       }
-      
+
       // Добавление фида и постов
       state.feeds.push(newFeed)
       const newPosts = posts.map(post => ({
@@ -117,7 +119,7 @@ const initApp = (i18nInstance) => {
         viewed: false,
       }))
       state.posts = [...newPosts, ...state.posts]
-      
+
       // Обновление UI
       state.form.status = 'added'
       state.form.error = null
@@ -127,7 +129,8 @@ const initApp = (i18nInstance) => {
       // Запуск отслеживания обновлений
       startFeedUpdates(feedId)
       view.showSuccess('RSS успешно загружен')
-    } catch (error) {
+    }
+    catch (error) {
       state.form.status = 'error'
       state.form.error = error.message
       
@@ -136,7 +139,8 @@ const initApp = (i18nInstance) => {
       } else {
         view.showError(error.message)
       }
-    } finally {
+    }
+    finally {
       view.enableForm()
     }
   })
@@ -155,24 +159,24 @@ const initApp = (i18nInstance) => {
     if (postLink) {
       const postId = postLink.dataset.id
       const post = state.posts.find(p => p.id === postId)
-      
+
       if (post) {
         post.viewed = true
         postLink.classList.remove('fw-bold')
         postLink.classList.add('fw-normal', 'link-secondary')
       }
     }
-    
+
     // Обработка кнопки предпросмотра
     const previewButton = e.target.closest('button[data-id]')
     if (previewButton) {
       const postId = previewButton.dataset.id
       const post = state.posts.find(p => p.id === postId)
-      
+
       if (post) {
         // Помечаем пост как просмотренный
         post.viewed = true
-        
+
         // Обновляем UI
         const postElement = previewButton.closest('li')
         const postLink = postElement.querySelector('a')
@@ -180,7 +184,7 @@ const initApp = (i18nInstance) => {
           postLink.classList.remove('fw-bold')
           postLink.classList.add('fw-normal', 'link-secondary')
         }
-        
+
         // Показываем модальное окно
         view.showPostModal(post)
       }

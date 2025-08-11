@@ -44,36 +44,36 @@ export default class View {
 
     const card = document.createElement('div')
     card.className = 'card border-0'
-    
+
     const cardBody = document.createElement('div')
     cardBody.className = 'card-body'
-    
+
     const title = document.createElement('h2')
     title.className = 'card-title h4'
     title.textContent = this.i18n.t('feeds')
-    
+
     cardBody.append(title)
     card.append(cardBody)
-    
+
     const listGroup = document.createElement('ul')
     listGroup.className = 'list-group border-0 rounded-0'
-    
+
     feeds.forEach((feed) => {
       const item = document.createElement('li')
       item.className = 'list-group-item border-0 border-end-0'
-      
+
       const feedTitle = document.createElement('h3')
       feedTitle.className = 'h6 m-0'
       feedTitle.textContent = feed.title
-      
+
       const description = document.createElement('p')
       description.className = 'm-0 small text-black-50'
       description.textContent = feed.description
-      
+
       item.append(feedTitle, description)
       listGroup.append(item)
     })
-    
+
     card.append(listGroup)
     this.feedsContainer.append(card)
   }
@@ -85,24 +85,24 @@ export default class View {
 
     const card = document.createElement('div')
     card.className = 'card border-0'
-    
+
     const cardBody = document.createElement('div')
     cardBody.className = 'card-body'
-    
+
     const title = document.createElement('h2')
     title.className = 'card-title h4'
     title.textContent = this.i18n.t('posts')
-    
+
     cardBody.append(title)
     card.append(cardBody)
-    
+
     const listGroup = document.createElement('ul')
     listGroup.className = 'list-group border-0 rounded-0'
-    
+
     posts.forEach((post) => {
       const item = document.createElement('li')
       item.className = 'list-group-item d-flex justify-content-between align-items-start border-0 border-end-0'
-      
+
       const link = document.createElement('a')
       link.href = post.link
       link.className = post.viewed 
@@ -117,7 +117,7 @@ export default class View {
         event.target.classList.remove('fw-bold')
         event.target.classList.add('fw-normal', 'link-secondary')
       })
-      
+
       const previewButton = document.createElement('button')
       previewButton.classList.add('btn', 'btn-outline-primary', 'btn-sm')
       previewButton.textContent = this.i18n.t('preview')
@@ -128,7 +128,7 @@ export default class View {
       item.append(link, previewButton)
       listGroup.append(item)
     })
-    
+
     card.append(listGroup)
     this.postsContainer.append(card)
   }
