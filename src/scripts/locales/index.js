@@ -8,5 +8,5 @@ const resources = {
   ru: {
     translation: ruTranslation,
   },
-};
+}
 export default resources

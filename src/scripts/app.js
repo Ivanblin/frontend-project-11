@@ -52,12 +52,12 @@ const initApp = (i18nInstance) => {
       if (addedPosts.length > 0) {
         // Сохраняем состояние просмотра перед обновлением
         const viewedLinks = new Set()
-        state.posts.forEach(post => {
+        state.posts.forEach((post) => {
           if (post.viewed) viewedLinks.add(post.link)
         })
 
         // Обновляем состояние для новых постов
-        state.posts.forEach(post => {
+        state.posts.forEach((post) => {
           if (viewedLinks.has(post.link)) {
             post.viewed = true
           }

@@ -26,7 +26,7 @@ export default class View {
 
   updateTexts() {
     const elements = document.querySelectorAll('[data-i18n]')
-    elements.forEach(element => {
+    elements.forEach((element) => {
       const key = element.dataset.i18n
       element.textContent = this.i18n.t(key)
     })
@@ -58,7 +58,7 @@ export default class View {
     const listGroup = document.createElement('ul')
     listGroup.className = 'list-group border-0 rounded-0'
     
-    feeds.forEach(feed => {
+    feeds.forEach((feed) => {
       const item = document.createElement('li')
       item.className = 'list-group-item border-0 border-end-0'
       
@@ -99,7 +99,7 @@ export default class View {
     const listGroup = document.createElement('ul')
     listGroup.className = 'list-group border-0 rounded-0'
     
-    posts.forEach(post => {
+    posts.forEach((post) => {
       const item = document.createElement('li')
       item.className = 'list-group-item d-flex justify-content-between align-items-start border-0 border-end-0'
       
