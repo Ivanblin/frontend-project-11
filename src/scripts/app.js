@@ -125,7 +125,7 @@ const initApp = (i18nInstance) => {
       state.form.error = null
       view.clearForm()
       view.render({ feeds: state.feeds, posts: state.posts })
-      
+
       // Запуск отслеживания обновлений
       startFeedUpdates(feedId)
       view.showSuccess('RSS успешно загружен')
@@ -133,10 +133,11 @@ const initApp = (i18nInstance) => {
     catch (error) {
       state.form.status = 'error'
       state.form.error = error.message
-      
+
       if (error.name === 'NetworkError' || error.name === 'ParseError') {
         view.showError(`errors.${error.name.toLowerCase()}`)
-      } else {
+      }
+      else {
         view.showError(error.message)
       }
     }

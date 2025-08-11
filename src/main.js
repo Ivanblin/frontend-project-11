@@ -8,7 +8,8 @@ import initApp from './scripts/app.js'
   try {
     const i18nInstance = await initI18n()
     initApp(i18nInstance)
-  } catch (e) {
+  }
+  catch (e) {
     console.error('Application initialization failed:', e)
   }
 })()

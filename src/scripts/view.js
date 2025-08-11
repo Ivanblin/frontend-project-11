@@ -105,8 +105,8 @@ export default class View {
 
       const link = document.createElement('a')
       link.href = post.link
-      link.className = post.viewed 
-        ? 'fw-normal link-secondary' 
+      link.className = post.viewed
+        ? 'fw-normal link-secondary'
         : 'fw-bold'
       link.target = '_blank'
       link.rel = 'noopener noreferrer'
@@ -124,7 +124,7 @@ export default class View {
       previewButton.dataset.id = post.id
       previewButton.dataset.bsToggle = 'modal'
       previewButton.dataset.bsTarget = '#modal'
-      
+
       item.append(link, previewButton)
       listGroup.append(item)
     })
@@ -132,6 +132,7 @@ export default class View {
     card.append(listGroup)
     this.postsContainer.append(card)
   }
+
   showPostModal(post) {
     this.modalTitle.textContent = post.title
     this.modalBody.textContent = post.description
