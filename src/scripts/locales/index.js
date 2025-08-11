@@ -1,5 +1,6 @@
-import enTranslation from './en/translation.json';
-import ruTranslation from './ru/translation.json';
+import enTranslation from './en/translation.json'
+import ruTranslation from './ru/translation.json'
+
 const resources = {
   en: {
     translation: enTranslation,
@@ -8,4 +9,4 @@ const resources = {
     translation: ruTranslation,
   },
 };
-export default resources;
+export default resources

@@ -1,4 +1,4 @@
-import * as yup from 'yup';
+import * as yup from 'yup'
 
 export const setupYup = (i18nInstance) => {
   yup.setLocale({
@@ -9,13 +9,13 @@ export const setupYup = (i18nInstance) => {
     string: {
       url: () => i18nInstance.t('errors.url'),
     },
-  });
-};
+  })
+}
 
 export const validateUrl = (url, feeds) => {
   const schema = yup.string()
     .required()
     .url()
-    .notOneOf(feeds);
-  return schema.validate(url);
-};
+    .notOneOf(feeds)
+  return schema.validate(url)
+}
