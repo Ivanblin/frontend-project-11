@@ -105,42 +105,33 @@ export default class View {
       
       const link = document.createElement('a');
       link.href = post.link;
-      // Обновляем классы в зависимости от просмотра
-      link.className = post.viewed ? 'fw-normal link-secondary' : 'fw-bold';
+      link.className = post.viewed 
+        ? 'fw-normal link-secondary' 
+        : 'fw-bold';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.textContent = post.title;
+      link.dataset.id = post.id;
 
       link.addEventListener('click', (event) => {
         event.target.classList.remove('fw-bold');
-        event.target.classList.add('fw-normal', 'text-secondary');
+        event.target.classList.add('fw-normal', 'link-secondary');
       });
       
-      // Добавляем кнопку предпросмотра
       const previewButton = document.createElement('button');
       previewButton.classList.add('btn', 'btn-outline-primary', 'btn-sm');
       previewButton.textContent = this.i18n.t('preview');
-      previewButton.setAttribute('data-id', post.feedId);
-      previewButton.setAttribute('data-bs-toggle', 'modal');
-      previewButton.setAttribute('data-bs-target', '#modal');
       previewButton.dataset.id = post.id;
+      previewButton.dataset.bsToggle = 'modal';
+      previewButton.dataset.bsTarget = '#modal';
       
-      const buttonContainer = document.createElement('div');
-      buttonContainer.className = 'ms-2';
-      buttonContainer.append(previewButton);
-      
-      const wrapper = document.createElement('div');
-      wrapper.className = 'd-flex justify-content-between w-100';
-      wrapper.append(link, buttonContainer);
-      
-      item.append(wrapper);
+      item.append(link, previewButton);
       listGroup.append(item);
     });
     
     card.append(listGroup);
     this.postsContainer.append(card);
   }
-
   showPostModal(post) {
     this.modalTitle.textContent = post.title;
     this.modalBody.textContent = post.description;
